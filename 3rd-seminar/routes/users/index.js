@@ -6,7 +6,7 @@ const responseMessage = require('../../modules/responseMessage');
 const statusCode = require('../../modules/statusCode');
 let usersDB = require('../../modules/users');
 
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
   const {id, password} = req.body; // 1. req.body에서 데이터 가져오기
   //2. request data 확인하기, id 또는 password data가 없다면 NullValue 반환
   if (!id || !password){
@@ -24,7 +24,7 @@ router.post('/signup', (req, res) => {
   if (isIddOverlap(id)){
       return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.ALREADY_ID));
   }
-  const createSalt = async() => {
+  const createSalt = async () => {
       crypto.randomBytes(64, (err, buf) => {
       //4. salt 생성
       const salt = buf.toString('base64');
@@ -45,7 +45,7 @@ router.post('/signup', (req, res) => {
     });
     console.log(usersDB);
     //7. status: 200 message: SING_UP_SUCCESS, data: id만 반환! (비밀번호, salt 반환 금지!!)
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGN_UP_SUCCESS, id))    ;
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGN_UP_SUCCESS, id))    
 })
 
 router.post('/signin', (req, res) => {

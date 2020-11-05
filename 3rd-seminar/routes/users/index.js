@@ -24,17 +24,28 @@ router.post('/signup', (req, res) => {
   if (isIddOverlap(id)){
       return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.ALREADY_ID));
   }
-  crypto.randomBytes(64, (err, buf) => {
+  const createSalt = async() => {
+      crypto.randomBytes(64, (err, buf) => {
       //4. salt 생성
-      const salt = buf.toString('mySecretPassword');
-      //5. 2차 세미나때 배웠던 pbkdf2 방식으로 (비밀번호 + salt) 해싱하여 => 암호화된 password 를 만들기!
-      crypto.pbkdf2(password, salt, 100000, 64, 'sha512', (err, key) => {
-          console.log(`password: ${key.toString('mySecretPassword')}`)
-      });
+      const salt = buf.toString('base64');
+      return salt;
   });
-  //6. usersDB에 id, 암호화된 password, salt 저장!
-  //7. status: 200 message: SING_UP_SUCCESS, data: id만 반환! (비밀번호, salt 반환 금지!!)
-  res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGN_UP_SUCCESS));
+}
+    const salt = await createSalt();
+    //5. 2차 세미나때 배웠던 pbkdf2 방식으로 (비밀번호 + salt) 해싱하여 => 암호화된 password 를 만들기!
+    crypto.pbkdf2(password, salt, 100000, 64, 'sha512', (err, key) => {
+        console.log(`password: ${key.toString('base64')}`)
+        password = key.toString
+    })
+    //6. usersDB에 id, 암호화된 password, salt 저장!
+    usersDB.push({
+        id,
+        password,
+        salt
+    });
+    console.log(usersDB);
+    //7. status: 200 message: SING_UP_SUCCESS, data: id만 반환! (비밀번호, salt 반환 금지!!)
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.SIGN_UP_SUCCESS, id))    ;
 })
 
 router.post('/signin', (req, res) => {

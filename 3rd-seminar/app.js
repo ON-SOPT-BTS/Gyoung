@@ -9,17 +9,6 @@ var indexRouter = require('./routes/index');
 var app = express();
 
 
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-
-io.on('connection', function(socket){
-    console.log('a user connected');
-    socket.on('from client', function(msg) {
-        console.log('message: ' + msg);
-        io.emit('to client', msg);
-    })
-})
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

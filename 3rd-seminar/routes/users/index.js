@@ -64,7 +64,7 @@ router.post('/signin', async (req, res) => {
   }
   //3. 존재하는 아이디인지 확인하기. 존재하지 않는 아이디면 NO USER 반환
   const user = await new Promise((resolve, reject) => {
-      resolve(usersDB.filter(m => m.id == id));
+      resolve(usersDB.filter(m => m.id == id)[0]);
   })
   if (user.length == 0) {
     return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NO_USER));
@@ -72,7 +72,7 @@ router.post('/signin', async (req, res) => {
   //4. 비밀번호 확인하기 - 로그인할 id의 salt를 DB에서 가져와서  사용자가 request로 보낸 password와
   //   암호화를 한후 디비에 저장되어있는 password와 일치하면 true일치하지 않으면 Miss Match password 반환
   const newPassword = await new Promise((resolve, reject) => {
-      crypto.pbkdf2(password, user[0].salt, 100000, 64, 'sha512', (err, key) => {
+      crypto.pbkdf2(password, user.salt, 100000, 64, 'sha512', (err, key) => {
           if (err) {
               reject(err);
           }
@@ -80,7 +80,7 @@ router.post('/signin', async (req, res) => {
       })
   })
   
-  if (newPassword != user[0].password) {
+  if (newPassword != user.password) {
       return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.MISS_MATCH_PW));
   }
   //5. status: 200 ,message: SIGNIN SUCCESS, data: id 반환 (비밀번호, salt 반환 금지!!)

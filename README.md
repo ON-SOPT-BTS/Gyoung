@@ -11,10 +11,10 @@
 [POST TABLE] 
 
 | id | author | title | contents | createdAt | updatedAt |
-|---|---|---|---|---|---|---|
+|---|---|---|---|---|---|
 
 
 [LIKE TABLE] 
 
 | id | user_id | post_id |
-|---|---|---|---|
+|---|---|---|

@@ -80,7 +80,7 @@ router.post('/signin', async (req, res) => {
 router.get('/', async (req, res) => {
     try{
         const users = await User.findAll({
-            attribues: ['id', 'email', 'userName'],
+            attributes: ['id', 'email', 'userName'],
         });
         console.log(users);
         return res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_USER_ALL_SUCCESS, users));

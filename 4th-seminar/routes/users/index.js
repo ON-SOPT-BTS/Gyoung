@@ -114,7 +114,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.get('/modify/:id', async (req, res) => {
+router.put('/modify/:id', async (req, res) => {
     try {
         const {id} = req.params;
         if (! id) {
@@ -150,7 +150,7 @@ router.get('/modify/:id', async (req, res) => {
     }
 })
 
-router.get('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     try{
 
         const {id} = req.params;

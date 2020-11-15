@@ -11,4 +11,13 @@ sequelize = new Sequelize(config.database, config.username, config.password, con
 db.sequelize = sequelize; 
 db.Sequelize = Sequelize;
 db.User = require('./user')(sequelize, Sequelize);
+db.Post = require('./post')(sequelize, Sequelize);
+db.Like = require('./like')(sequelize, Sequelize);
+
+db.User.hasMany(db.Post, {onDelete : 'cascade'});
+db.Post.belongsTo(db.User);
+
+db.User.belongsToMany(db.Post, { through : 'Like', as : 'Liked' });
+db.Post.belongsToMany(db.User, { through : 'Like', as : 'Liker' });
+
 module.exports = db;

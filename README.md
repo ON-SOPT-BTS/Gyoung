@@ -16,5 +16,5 @@
 
 [LIKE TABLE] 
 
-| id | user_id | post_id |
-|---|---|---|
+| user_id | post_id |
+|---|---|

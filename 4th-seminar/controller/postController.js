@@ -61,9 +61,8 @@ module.exports = {
                 where : {UserId, PostId}});
             if (deleted_count > 0){
                 return res.status(sc.OK).send(ut.success(sc.OK, rm.DELETE_LIKE_SUCCESS));
-            } else {
-                return res.status(sc.NOT_FOUND).send(ut.fail(sc.NOT_FOUND, rm.DELETE_LIKE_FAIL));
-            }
+            } 
+            return res.status(sc.NOT_FOUND).send(ut.fail(sc.NOT_FOUND, rm.DELETE_LIKE_FAIL));
         } catch (err) {
             console.error(err);
             return res.status(sc.INTERNAL_SERVER_ERROR).send(ut.fail(sc.INTERNAL_SERVER_ERROR, rm.DELETE_LIKE_FAIL));
